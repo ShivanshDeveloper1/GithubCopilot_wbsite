@@ -15,7 +15,7 @@ export default function AboutPage() {
       <PageReveal className="mx-auto max-w-7xl px-[var(--space-page)] py-16 sm:py-24">
         <SectionHeading eyebrow="Our story" title="Small comforts. Big beginnings." description="Little Haven began with a simple belief: the things around a baby should feel as considered as the care given to them." />
         <div className="mt-12 grid items-center gap-8 lg:grid-cols-[0.85fr_1.15fr]">
-          <div className="aspect-[4/3] rounded-[2rem] bg-[var(--color-mint)]/20 bg-[url('/images/about-story.jpg')] bg-cover bg-center shadow-[var(--shadow-lifted)]" role="img" aria-label="A soft baby-care collection" />
+          <div className="aspect-[4/3] rounded-[2rem] bg-[var(--color-mint)]/20 bg-[url('/pampers3.jpg')] bg-cover bg-center shadow-[var(--shadow-lifted)]" role="img" aria-label="A soft baby-care collection" />
           <div className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-white p-7 shadow-[var(--shadow-soft)] sm:p-10">
             <p className="text-base leading-8 text-[var(--color-muted)]">We make room for the beautiful, imperfect, ordinary moments that become the memories you keep. From a first bath to a much-loved bedtime layer, our collection is made to bring a little more softness to the everyday.</p>
             <p className="mt-5 text-base leading-8 text-[var(--color-muted)]">That means fewer distractions, more dependable essentials, and a shopping experience that meets you gently wherever you are in the journey.</p>

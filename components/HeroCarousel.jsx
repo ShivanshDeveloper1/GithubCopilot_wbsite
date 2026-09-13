@@ -6,9 +6,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const slides = [
-  { eyebrow: "Made for little beginnings", title: "Gentle care for every little moment.", description: "Thoughtful essentials that bring a little more ease to the everyday rhythm of family life.", image: "/images/hero-1.jpg" },
-  { eyebrow: "Comfort, wrapped with care", title: "Soft layers for growing adventures.", description: "Discover sweet, practical favourites designed to move through nap time, playtime, and everything between.", image: "/images/hero-2.jpg" },
-  { eyebrow: "A calmer way to shop", title: "The tiny things that make a big difference.", description: "From bath time to bedtime, find trusted care made to feel good for your little one and you.", image: "/images/hero-3.jpg" },
+  { eyebrow: "Made for little beginnings", title: "Gentle care for every little moment.", description: "Thoughtful essentials that bring a little more ease to the everyday rhythm of family life.", image: "/pampers2.jpg" },
+  { eyebrow: "Comfort, wrapped with care", title: "Soft layers for growing adventures.", description: "Discover sweet, practical favourites designed to move through nap time, playtime, and everything between.", image: "/pampers.jpg" },
+  { eyebrow: "A calmer way to shop", title: "The tiny things that make a big difference.", description: "From bath time to bedtime, find trusted care made to feel good for your little one and you.", image: "/pampers3.jpg" },
 ];
 
 export default function HeroCarousel() {
