@@ -101,7 +101,7 @@ export default function AdminProductsPage() {
                       <p className="font-bold text-[var(--color-navy)]">{product.name}</p>
                       <p className="mt-1 text-xs text-[var(--color-muted)]">{product.category}</p>
                     </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-[var(--color-navy)]">${product.price}</td>
+                    <td className="px-6 py-4 text-sm font-semibold text-[var(--color-navy)]">  ₹{product.price}</td>
                     <td className="px-6 py-4">
                       <span className="inline-flex items-center gap-2 rounded-full bg-[var(--color-mint)]/15 px-3 py-1.5 text-xs font-bold text-[var(--color-navy)]">
                         <span className="size-1.5 rounded-full bg-[var(--color-mint)]" /> In stock

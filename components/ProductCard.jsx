@@ -93,7 +93,7 @@ export default function ProductCard({ product }) {
                 {product.name}
               </Link>
             </h3>
-            <span className="shrink-0 font-bold text-[var(--color-pink)]">{product.price}</span>
+            <span className="shrink-0 font-bold text-[var(--color-pink)]">  ₹{product.price}</span>
           </div>
         </div>
 

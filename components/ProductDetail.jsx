@@ -106,7 +106,7 @@ export default function ProductDetail({ product }) {
             variants={itemVariants}
             className="mt-5 font-[var(--font-heading)] text-2xl font-bold text-[var(--color-pink)]"
           >
-            {product.price}
+            ₹{product.price}
           </motion.p>
 
           <motion.p
