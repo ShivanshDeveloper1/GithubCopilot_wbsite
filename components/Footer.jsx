@@ -85,11 +85,11 @@ export default function Footer() {
           </p>
 
           <a
-            href="mailto:hello@littlehaven.example"
+            href="mailto:shivanshsingh4539@gmail.com"
             className="mt-4 flex items-center gap-2 text-sm font-semibold text-[var(--color-mint)] hover:text-white"
           >
             <Mail size={16} aria-hidden="true" />
-            hello@littlehaven.example
+           shivanshsingh4539@gmail.com
           </a>
         </div>
       </div>

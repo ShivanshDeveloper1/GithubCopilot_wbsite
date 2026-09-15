@@ -4,11 +4,14 @@ import { Edit3, MoreHorizontal, Plus, Search, Trash2, Loader2 } from "lucide-rea
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import PageReveal from "@/components/PageReveal";
+import EditProductModal from "../../../components/EditProductModal";
+
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState(null); // Track edited item
 
   useEffect(() => {
     fetchProducts();
@@ -35,11 +38,23 @@ export default function AdminProductsPage() {
       const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
       const data = await res.json();
       if (data.success) {
-        setProducts((currentProducts) => currentProducts.filter((product) => product.id !== id));
+        setProducts((currentProducts) =>
+          currentProducts.filter((product) => (product._id || product.id) !== id)
+        );
       }
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleUpdateProduct = (updatedProduct) => {
+    setProducts((prev) =>
+      prev.map((p) =>
+        (p._id || p.id) === (updatedProduct._id || updatedProduct.id)
+          ? updatedProduct
+          : p
+      )
+    );
   };
 
   const filteredProducts = products.filter(
@@ -92,42 +107,63 @@ export default function AdminProductsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[var(--color-border)]">
-                {filteredProducts.map((product) => (
-                  <tr key={product.id} className="transition-colors hover:bg-[var(--color-background)]/70">
-                    <td className="px-6 py-4">
-                      <div className="size-12 rounded-xl bg-[var(--color-mint)]/15 bg-cover bg-center" style={{ backgroundImage: `url(${product.image})` }} role="img" aria-label={product.name} />
-                    </td>
-                    <td className="px-6 py-4">
-                      <p className="font-bold text-[var(--color-navy)]">{product.name}</p>
-                      <p className="mt-1 text-xs text-[var(--color-muted)]">{product.category}</p>
-                    </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-[var(--color-navy)]">  ₹{product.price}</td>
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center gap-2 rounded-full bg-[var(--color-mint)]/15 px-3 py-1.5 text-xs font-bold text-[var(--color-navy)]">
-                        <span className="size-1.5 rounded-full bg-[var(--color-mint)]" /> In stock
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex justify-end gap-1">
-                        <button type="button" aria-label={`Edit ${product.name}`} className="flex size-9 items-center justify-center rounded-full text-[var(--color-muted)] transition-colors hover:bg-[var(--color-mint)]/15 hover:text-[var(--color-navy)]">
-                          <Edit3 size={16} aria-hidden="true" />
-                        </button>
-                        <button type="button" aria-label={`Delete ${product.name}`} onClick={() => deleteProduct(product.id)} className="flex size-9 items-center justify-center rounded-full text-[var(--color-muted)] transition-colors hover:bg-[var(--color-pink)]/10 hover:text-[var(--color-pink)]">
-                          <Trash2 size={16} aria-hidden="true" />
-                        </button>
-                        <button type="button" aria-label={`More actions for ${product.name}`} className="flex size-9 items-center justify-center rounded-full text-[var(--color-muted)] hover:bg-[var(--color-background)]">
-                          <MoreHorizontal size={17} aria-hidden="true" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {filteredProducts.map((product) => {
+                  const id = product._id || product.id;
+                  return (
+                    <tr key={id} className="transition-colors hover:bg-[var(--color-background)]/70">
+                      <td className="px-6 py-4">
+                        <div className="size-12 rounded-xl bg-[var(--color-mint)]/15 bg-cover bg-center" style={{ backgroundImage: `url(${product.image})` }} role="img" aria-label={product.name} />
+                      </td>
+                      <td className="px-6 py-4">
+                        <p className="font-bold text-[var(--color-navy)]">{product.name}</p>
+                        <p className="mt-1 text-xs text-[var(--color-muted)]">{product.category}</p>
+                      </td>
+                      <td className="px-6 py-4 text-sm font-semibold text-[var(--color-navy)]"> ₹{product.price}</td>
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center gap-2 rounded-full bg-[var(--color-mint)]/15 px-3 py-1.5 text-xs font-bold text-[var(--color-navy)]">
+                          <span className="size-1.5 rounded-full bg-[var(--color-mint)]" /> In stock
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex justify-end gap-1">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedProduct(product)}
+                            aria-label={`Edit ${product.name}`}
+                            className="flex size-9 items-center justify-center rounded-full text-[var(--color-muted)] transition-colors hover:bg-[var(--color-mint)]/15 hover:text-[var(--color-navy)]"
+                          >
+                            <Edit3 size={16} aria-hidden="true" />
+                          </button>
+                          <button
+                            type="button"
+                            aria-label={`Delete ${product.name}`}
+                            onClick={() => deleteProduct(id)}
+                            className="flex size-9 items-center justify-center rounded-full text-[var(--color-muted)] transition-colors hover:bg-[var(--color-pink)]/10 hover:text-[var(--color-pink)]"
+                          >
+                            <Trash2 size={16} aria-hidden="true" />
+                          </button>
+                          <button type="button" aria-label={`More actions for ${product.name}`} className="flex size-9 items-center justify-center rounded-full text-[var(--color-muted)] hover:bg-[var(--color-background)]">
+                            <MoreHorizontal size={17} aria-hidden="true" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         )}
         {!loading && filteredProducts.length === 0 && <p className="px-6 py-12 text-center text-sm text-[var(--color-muted)]">No products match your search.</p>}
       </div>
+
+      {selectedProduct && (
+        <EditProductModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+          onSuccess={handleUpdateProduct}
+        />
+      )}
     </PageReveal>
   );
 }

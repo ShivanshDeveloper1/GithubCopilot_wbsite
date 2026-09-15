@@ -4,7 +4,7 @@ import SectionHeading from "@/components/SectionHeading";
 import { products } from "@/data/products";
 
 const metrics = [
-  { label: "Total revenue", value: "$8,642", change: "+12.4%", icon: DollarSign },
+  { label: "Total revenue", value: "₹8,642", change: "+12.4%", icon: DollarSign },
   { label: "Orders this month", value: "184", change: "+8.2%", icon: ShoppingCart },
   { label: "Products listed", value: products.length.toString().padStart(2, "0"), change: "Active", icon: Box },
 ];
