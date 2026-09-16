@@ -76,10 +76,10 @@ export default function AddProductPage() {
             Category
             <select name="category" defaultValue="" required className="mt-2 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-background)] px-4 py-3 font-normal outline-none transition-colors focus:border-[var(--color-mint)]">
               <option value="" disabled>Select a category</option>
-              <option value="Sleep essentials">Sleep essentials</option>
-              <option value="Bath time">Bath time</option>
-              <option value="Little outfits">Little outfits</option>
-              <option value="Feeding">Feeding</option>
+              <option value="Sleep essentials">Baby Diapers	( LittlePips Diaper ke sabhi packs )</option>
+              <option value="Bath time">Sanitary Pads (	Secure Dry Sanitary Pads )</option>
+              <option value="Little outfits">Baby Wipes( LittlePips Soft & Gentle Baby Wipes )</option>
+              {/* <option value="Feeding">Feeding</option> */}
             </select>
           </label>
 
