@@ -24,7 +24,7 @@ export default function ContactPage() {
             <h2 className="font-[var(--font-heading)] text-xl font-bold">Good things start with hello.</h2>
             <p className="mt-3 text-sm leading-7 text-white/70">We usually reply within one business day, Monday through Friday.</p>
             <div className="mt-7 space-y-5 text-sm">
-              <a href="mailto:shivanshsingh4539@gmail.com" className="flex items-center gap-3 text-white/85 transition-colors hover:text-[var(--color-mint)]"><Mail size={17} aria-hidden="true" />shivanshsingh4539@gmail.com</a>
+              <a href="mailto:Softsparhhygienepvtitd@gmail.com" className="flex items-center gap-3 text-white/85 transition-colors hover:text-[var(--color-mint)]"><Mail size={17} aria-hidden="true" />Softsparhhygienepvtitd@gmail.com</a>
               <a href="tel:+18005550142" className="flex items-center gap-3 text-white/85 transition-colors hover:text-[var(--color-mint)]"><Phone size={17} aria-hidden="true" /> +91-7017665151</a>
               <p className="flex items-center gap-3 text-white/85"><MapPin size={17} aria-hidden="true" /> Portland, Oregon</p>
             </div>

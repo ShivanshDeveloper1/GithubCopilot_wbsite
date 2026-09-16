@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import FeaturesSection from "@/components/FeaturesSection";
@@ -11,13 +12,11 @@ import Product from "@/models/pamper";
 export default async function Home() {
   await dbConnect();
 
-  // 1. Removed {} and added .lean() for plain JS objects
   const rawProducts = await Product.find()
     .sort({ createdAt: -1 })
     .limit(8)
     .lean();
 
-  // 2. Safely transform _id to string for Next.js Client Components
   const products = rawProducts.map((doc: any) => ({
     ...doc,
     id: doc._id.toString(),
@@ -36,7 +35,9 @@ export default async function Home() {
           description="Find the essentials that make daily routines feel a touch softer."
         />
         <div className="mt-10">
-          <CategoryGrid />
+          <Suspense fallback={<div>Loading categories...</div>}>
+            <CategoryGrid />
+          </Suspense>
         </div>
       </section>
 
@@ -48,7 +49,9 @@ export default async function Home() {
           description="Practical, lovely, and ready for all the small moments that fill your day."
         />
         <div className="mt-10">
-          <ProductGrid products={products} />
+          <Suspense fallback={<div>Loading products...</div>}>
+            <ProductGrid products={products} />
+          </Suspense>
         </div>
       </section>
 
