@@ -34,10 +34,10 @@ export default function CartPage() {
           <aside className="rounded-[var(--radius-card)] bg-[var(--color-navy)] p-6 text-white shadow-[var(--shadow-lifted)] lg:sticky lg:top-24">
             <h2 className="font-[var(--font-heading)] text-lg font-bold">Order summary</h2>
             <div className="mt-6 space-y-4 border-b border-white/15 pb-6 text-sm">
-              <div className="flex justify-between gap-4 text-white/70"><span>Subtotal</span><span className="font-semibold text-white">${totalPrice.toFixed(2)}</span></div>
+              <div className="flex justify-between gap-4 text-white/70"><span>Subtotal</span><span className="font-semibold text-white">₹{totalPrice.toFixed(2)}</span></div>
               <div className="flex justify-between gap-4 text-white/70"><span>Delivery</span><span className="font-semibold text-[var(--color-mint)]">Free</span></div>
             </div>
-            <div className="flex justify-between gap-4 pt-5"><span className="font-bold">Total</span><span className="font-[var(--font-heading)] text-xl font-bold">${totalPrice.toFixed(2)}</span></div>
+            <div className="flex justify-between gap-4 pt-5"><span className="font-bold">Total</span><span className="font-[var(--font-heading)] text-xl font-bold">₹{totalPrice.toFixed(2)}</span></div>
             <button type="button" className="mt-7 flex w-full items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--color-pink)] px-5 py-3.5 text-sm font-bold text-white transition-transform hover:-translate-y-0.5">Checkout <ArrowRight size={17} aria-hidden="true" /></button>
             <p className="mt-4 text-center text-xs leading-5 text-white/55">Secure checkout coming soon.</p>
           </aside>

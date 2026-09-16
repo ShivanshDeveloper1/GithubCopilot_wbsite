@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import ProductGrid from "@/components/ProductGrid";
 import SectionHeading from "@/components/SectionHeading";
 import PageReveal from "@/components/PageReveal";
@@ -6,8 +7,7 @@ import Product from "@/models/pamper";
 
 export default async function ProductsPage() {
   await dbConnect();
-  
-  // Fetch products from MongoDB and convert to plain JSON objects
+
   const rawProducts = await Product.find({}).sort({ createdAt: -1 });
   const products = rawProducts.map((doc) => {
     const obj = doc.toObject();
@@ -25,7 +25,9 @@ export default async function ProductsPage() {
         description="Reliable little essentials for bath time, bedtime, mealtime, and all the moments between." 
       />
       <div className="mt-12">
-        <ProductGrid products={products} />
+        <Suspense fallback={<div className="py-12 text-center text-sm text-[var(--color-muted)]">Loading items...</div>}>
+          <ProductGrid products={products} />
+        </Suspense>
       </div>
     </PageReveal>
   );

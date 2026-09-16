@@ -5,10 +5,9 @@ import Link from "next/link";
 import { Bath, Baby, Shirt, Utensils } from "lucide-react";
 
 const categories = [
-  { label: "Bath time", icon: Bath },
-  { label: "Little outfits", icon: Shirt },
-  { label: "Feeding", icon: Utensils },
-  { label: "Newborn care", icon: Baby },
+  { label: "Baby Diapers", icon: Bath },
+  { label: " Sanitary Pads", icon: Shirt },
+  { label: "Baby Wipes", icon: Baby },
 ];
 
 const containerVariants = {
@@ -32,7 +31,7 @@ const itemVariants = {
 export default function CategoryGrid() {
   return (
     <motion.div
-      className="grid grid-cols-2 gap-4 md:grid-cols-4"
+      className="grid grid-cols-2 gap-4 md:grid-cols-3"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
@@ -41,7 +40,7 @@ export default function CategoryGrid() {
       {categories.map(({ label, icon: Icon }) => (
         <motion.div key={label} variants={itemVariants} whileHover={{ y: -6 }}>
           <Link
-            href="/products"
+           href={`/products?category=${encodeURIComponent(label.trim())}`}
             className="group flex min-h-36 flex-col items-center justify-center gap-4 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-white p-5 text-center shadow-[var(--shadow-soft)] transition-shadow duration-300 hover:shadow-[var(--shadow-lifted)]"
           >
             <motion.span
