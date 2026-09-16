@@ -18,7 +18,7 @@ export default function CartItem({ item }) {
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--color-muted)]">{item.category}</p>
             <h2 className="mt-1 font-[var(--font-heading)] font-bold text-[var(--color-navy)]">{item.name}</h2>
           </div>
-          <p className="shrink-0 font-bold text-[var(--color-pink)]">${(item.price * item.quantity).toFixed(2)}</p>
+          <p className="shrink-0 font-bold text-[var(--color-pink)]">₹{(item.price * item.quantity).toFixed(2)}</p>
         </div>
         <div className="mt-5 flex items-center justify-between gap-3">
           <div className="flex items-center gap-1 rounded-[var(--radius-button)] border border-[var(--color-border)] p-1">

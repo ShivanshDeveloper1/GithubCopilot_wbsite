@@ -1,7 +1,7 @@
-import  Product  from "@/models/pamper";
+import Product from "@/models/pamper";
 import { dbConnect } from "@/lib/db";
-import { NextResponse } from "next/server";
-import { v2 as cloudinary } from "cloudinary";
+import { NextRequest, NextResponse } from "next/server";
+import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -9,43 +9,48 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// Define the shape of params for Next.js App Router
+type Context = {
+  params: Promise<{ id: string }>;
+};
 
-export async function DELETE(req, { params }) {
+export async function DELETE(req: NextRequest, { params }: Context) {
   try {
     await dbConnect();
     const { id } = await params;
     await Product.findByIdAndDelete(id);
     return NextResponse.json({ success: true, message: "Product deleted" });
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
-
-export async function PUT(req, { params }) {
+export async function PUT(req: NextRequest, { params }: Context) {
   try {
     await dbConnect();
     const { id } = await params;
     const formData = await req.formData();
 
-    const name = formData.get("name");
-    const category = formData.get("category");
-    const price = parseFloat(formData.get("price"));
-    const description = formData.get("description");
+    const name = formData.get("name") as string;
+    const category = formData.get("category") as string;
+    const price = parseFloat(formData.get("price") as string);
+    const description = formData.get("description") as string;
     const file = formData.get("image");
 
-    const updateData = { name, category, price, description };
+    // Tell TypeScript this object can hold any string keys (so we can append .image later)
+    const updateData: Record<string, any> = { name, category, price, description };
 
     // If a new image file is uploaded, upload it to Cloudinary
     if (file && typeof file !== "string" && file.size > 0) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
-      const uploadResponse = await new Promise((resolve, reject) => {
+      // Type the Promise as UploadApiResponse so TS knows secure_url exists
+      const uploadResponse = await new Promise<UploadApiResponse>((resolve, reject) => {
         cloudinary.uploader
           .upload_stream({ folder: "products" }, (error, result) => {
             if (error) reject(error);
-            else resolve(result);
+            else resolve(result as UploadApiResponse);
           })
           .end(buffer);
       });
@@ -63,7 +68,7 @@ export async function PUT(req, { params }) {
     }
 
     return NextResponse.json({ success: true, data: updatedProduct });
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
