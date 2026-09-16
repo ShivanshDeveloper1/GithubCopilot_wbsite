@@ -1,16 +1,16 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import Link from "next/link";
-import { Bath, Baby, Shirt, Utensils } from "lucide-react";
+import { Bath, Baby, Shirt } from "lucide-react";
 
 const categories = [
   { label: "Baby Diapers", icon: Bath },
-  { label: " Sanitary Pads", icon: Shirt },
+  { label: "Sanitary Pads", icon: Shirt },
   { label: "Baby Wipes", icon: Baby },
 ];
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -18,7 +18,7 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 24, scale: 0.95 },
   visible: {
     opacity: 1,
@@ -40,7 +40,7 @@ export default function CategoryGrid() {
       {categories.map(({ label, icon: Icon }) => (
         <motion.div key={label} variants={itemVariants} whileHover={{ y: -6 }}>
           <Link
-           href={`/products?category=${encodeURIComponent(label.trim())}`}
+            href={`/products?category=${encodeURIComponent(label.trim())}`}
             className="group flex min-h-36 flex-col items-center justify-center gap-4 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-white p-5 text-center shadow-[var(--shadow-soft)] transition-shadow duration-300 hover:shadow-[var(--shadow-lifted)]"
           >
             <motion.span
