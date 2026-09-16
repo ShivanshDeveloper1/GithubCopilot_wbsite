@@ -104,19 +104,23 @@ export default function EditProductModal({ product, onClose, onSuccess }) {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-bold uppercase text-[var(--color-navy)]">
-                Category
-              </label>
-              <input
-                type="text"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                required
-                className="mt-1 w-full rounded-lg border border-[var(--color-border)] p-2.5 text-sm outline-none focus:border-[var(--color-pink)]"
-              />
-            </div>
+      <div>
+  <label className="block text-xs font-bold uppercase text-[var(--color-navy)]">
+    Category
+  </label>
+  <select
+    name="category"
+    value={formData.category}
+    onChange={handleChange}
+    required
+    className="mt-1 w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-background)] p-2.5 text-sm outline-none focus:border-[var(--color-pink)]"
+  >
+    <option value="" disabled>Select a category</option>
+    <option value="Baby Diapers">Baby Diapers ( LittlePips Diaper ke sabhi packs )</option>
+    <option value="Sanitary Pads">Sanitary Pads ( Secure Dry Sanitary Pads )</option>
+    <option value="Baby Wipes">Baby Wipes ( LittlePips Soft & Gentle Baby Wipes )</option>
+  </select>
+</div>
 
             <div>
               <label className="block text-xs font-bold uppercase text-[var(--color-navy)]">
