@@ -11,18 +11,18 @@ import Product from "@/models/pamper";
 export default async function Home() {
   await dbConnect();
 
-  // Fetch featured products from MongoDB
-  const rawProducts = await Product.find({})
+  // 1. Removed {} and added .lean() for plain JS objects
+  const rawProducts = await Product.find()
     .sort({ createdAt: -1 })
-    .limit(8);
+    .limit(8)
+    .lean();
 
-  const products = rawProducts.map((doc) => {
-    const obj = doc.toObject();
-    obj.id = obj._id.toString();
-    delete obj._id;
-    delete obj.__v;
-    return obj;
-  });
+  // 2. Safely transform _id to string for Next.js Client Components
+  const products = rawProducts.map((doc: any) => ({
+    ...doc,
+    id: doc._id.toString(),
+    _id: doc._id.toString(),
+  }));
 
   return (
     <>
