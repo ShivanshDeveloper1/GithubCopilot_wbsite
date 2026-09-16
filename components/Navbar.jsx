@@ -9,6 +9,8 @@
     { label: "Products", href: "/products" },
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
+    { label: "Blog", href: "/blog" },
+
   ];
 
   export default function Navbar() {
