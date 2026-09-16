@@ -14,7 +14,7 @@ export default async function ProductsPage() {
     obj.id = obj._id.toString();
     delete obj._id;
     delete obj.__v;
-    return obj;
+    return obj;x
   });
 
   return (
