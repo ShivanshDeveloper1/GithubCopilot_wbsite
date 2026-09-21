@@ -26,7 +26,7 @@ export default function ContactPage() {
             <div className="mt-7 space-y-5 text-sm">
               <a href="mailto:Softsparhhygienepvtitd@gmail.com" className="flex items-center gap-3 text-white/85 transition-colors hover:text-[var(--color-mint)]"><Mail size={17} aria-hidden="true" />Softsparhhygienepvtitd@gmail.com</a>
               <a href="tel:+18005550142" className="flex items-center gap-3 text-white/85 transition-colors hover:text-[var(--color-mint)]"><Phone size={17} aria-hidden="true" /> +91-7017665151</a>
-              <p className="flex items-center gap-3 text-white/85"><MapPin size={17} aria-hidden="true" /> Portland, Oregon</p>
+              <p className="flex items-center gap-3 text-white/85"><MapPin size={17} aria-hidden="true" />Rorkee - 247667</p>
             </div>
           </div>
           <div className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-white p-7 shadow-[var(--shadow-soft)]">

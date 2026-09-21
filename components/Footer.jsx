@@ -1,6 +1,7 @@
 import { Mail, Pin } from "lucide-react";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import Link from "next/link";
+import Image from "next/image";
 
 const navigationLinks = [
   { label: "Home", href: "/" },
@@ -14,6 +15,20 @@ const supportLinks = [
   { label: "FAQs", href: "/faqs" },
 ];
 
+const socialLinks = [
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/littlepips.in?stkn=emR0MGFsY25sdWRm",
+    Icon: FaInstagram,
+  },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/profile.php?id=61592930366409",
+    Icon: FaFacebook,
+  }
+ 
+];
+
 export default function Footer() {
   return (
     <footer className="mt-16 bg-[var(--color-navy)] text-white">
@@ -22,20 +37,11 @@ export default function Footer() {
         {/* Brand Section */}
         <div className="max-w-xs">
           <Link href="/" className="flex items-center gap-2.5">
-            <span className="flex size-10 items-center justify-center rounded-2xl bg-[var(--color-mint)] text-[var(--color-navy)]">
-              <Pin
-                size={20}
-                fill="currentColor"
-                aria-hidden="true"
-              />
-            </span>
+         
+                  <Image src={'/logo.jpeg'} alt="logo" width={85} height={95}  className="object-cover" />
+          
 
-            <span className="font-[var(--font-heading)] text-lg font-bold tracking-[-0.03em]">
-              Little{" "}
-              <span className="text-[var(--color-pink)]">
-                Haven
-              </span>
-            </span>
+          
           </Link>
 
           <p className="mt-5 text-sm leading-7 text-white/70">
@@ -43,23 +49,20 @@ export default function Footer() {
           </p>
 
           {/* Social Media Icons */}
-          <div className="mt-6 flex gap-2">
-            {[FaInstagram, FaFacebook, FaTwitter].map(
-              (Icon, index) => (
-                <a
-                  key={index}
-                  href="#"
-                  aria-label={`Social media placeholder ${index + 1}`}
-                  className="flex size-10 items-center justify-center rounded-full border border-white/20 text-white/75 transition-colors hover:border-[var(--color-mint)] hover:text-[var(--color-mint)]"
-                >
-                  <Icon
-                    size={17}
-                    aria-hidden="true"
-                  />
-                </a>
-              )
-            )}
-          </div>
+       <div className="mt-6 flex gap-2">
+  {socialLinks.map(({ label, href, Icon }) => (
+    <a
+      key={label}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className="flex size-10 items-center justify-center rounded-full border border-white/20 text-white/75 transition-colors hover:border-[var(--color-mint)] hover:text-[var(--color-mint)]"
+    >
+      <Icon size={17} aria-hidden="true" />
+    </a>
+  ))}
+</div>
         </div>
 
         {/* Explore Links */}
@@ -76,21 +79,12 @@ export default function Footer() {
 
         {/* Newsletter / Contact */}
         <div>
-          <h2 className="font-[var(--font-heading)] text-sm font-bold tracking-wide text-white">
-            Stay in the know
-          </h2>
+    <h2 className="font-[var(--font-heading)] text-sm font-bold tracking-wide text-white"> Contact Information </h2>
 
-          <p className="mt-4 text-sm leading-6 text-white/70">
-            New arrivals, helpful tips, and tiny joys in your inbox.
-          </p>
+      <p className="mt-4 text-sm leading-6 text-white/70"> H.N. 315, Rampur, <br /> Roorkee – 247667, <br /> Haridwar, Uttarakhand, India <br /> Phone: +91 70176 65151 </p>
 
-          <a
-            href="mailto:Softsparhhygienepvtitd@gmail.com"
-            className="mt-4 flex items-center gap-2 text-sm font-semibold text-[var(--color-mint)] hover:text-white"
-          >
-            <Mail size={16} aria-hidden="true" />
-           Softsparhhygienepvtitd@gmail.com
-          </a>
+         <a href="mailto:Softsparhhygienepvtitd@gmail.com" className="mt-4 flex items-center gap-2 text-sm font-semibold text-[var(--color-mint)] hover:text-white" > <Mail size={16} aria-hidden="true" /> Softsparhhygienepvtitd@gmail.com </a>
+       
         </div>
       </div>
 
