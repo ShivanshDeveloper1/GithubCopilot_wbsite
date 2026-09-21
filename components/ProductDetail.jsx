@@ -7,22 +7,25 @@ import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 
 export default function ProductDetail({ product }) {
+  // Normalize image sources: support both product.images array and single product.image
+  const imageList =
+    product?.images && product.images.length > 0
+      ? product.images
+      : [product.image];
+
+  const [selectedImage, setSelectedImage] = useState(imageList[0]);
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
   const { addToCart } = useCart();
 
   const addProductToCart = () => {
-    // Add items to cart
     Array.from({ length: quantity }).forEach(() => addToCart(product));
-
-    // Trigger visual success state on the button
     setIsAdded(true);
     setTimeout(() => {
       setIsAdded(false);
     }, 1800);
   };
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0, y: 24 },
     visible: {
@@ -52,7 +55,6 @@ export default function ProductDetail({ product }) {
       animate="visible"
       className="mx-auto max-w-7xl px-[var(--space-page)] py-12 sm:py-20"
     >
-      {/* Back Link with hover animation */}
       <motion.div variants={itemVariants}>
         <Link
           href="/products"
@@ -68,22 +70,51 @@ export default function ProductDetail({ product }) {
         </Link>
       </motion.div>
 
-      <div className="mt-8 grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
-        {/* Product Image Container with scale & shadow lift */}
-        <motion.div
-          variants={itemVariants}
-          whileHover={{ scale: 1.02 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="aspect-square overflow-hidden rounded-[2rem] bg-[var(--color-mint)]/15 shadow-[var(--shadow-lifted)]"
-        >
+      <div className="mt-8 grid items-start gap-10 lg:grid-cols-2 lg:gap-20">
+        {/* Product Gallery Section */}
+        <motion.div variants={itemVariants} className="flex flex-col gap-4">
           <motion.div
-            className="h-full w-full bg-cover bg-center"
-            style={{ backgroundImage: `url(${product.image})` }}
-            role="img"
-            aria-label={product.name}
-            whileHover={{ scale: 1.06 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          />
+            whileHover={{ scale: 1.01 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="flex aspect-square items-center justify-center overflow-hidden rounded-[2rem] bg-[var(--color-mint)]/15 p-4 shadow-[var(--shadow-lifted)] sm:p-6"
+          >
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={selectedImage}
+                src={selectedImage}
+                alt={product.name}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="h-full w-full object-contain"
+              />
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Thumbnails (Only rendered if there are multiple images) */}
+          {imageList.length > 1 && (
+            <div className="flex gap-3 overflow-x-auto pb-2">
+              {imageList.map((img, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setSelectedImage(img)}
+                  className={`relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-2 bg-[var(--color-mint)]/10 p-1 transition-all ${
+                    selectedImage === img
+                      ? "border-[var(--color-pink)] shadow-sm"
+                      : "border-transparent opacity-70 hover:opacity-100"
+                  }`}
+                >
+                  <img
+                    src={img}
+                    alt={`${product.name} ${idx + 1}`}
+                    className="h-full w-full object-contain"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </motion.div>
 
         {/* Product Info */}
@@ -124,7 +155,7 @@ export default function ProductDetail({ product }) {
             <p className="text-sm font-bold text-[var(--color-navy)]">
               Quantity
             </p>
-            <div className="mt-3 flex items-center gap-1 rounded-[var(--radius-button)] border border-[var(--color-border)] p-1 w-fit">
+            <div className="mt-3 flex w-fit items-center gap-1 rounded-[var(--radius-button)] border border-[var(--color-border)] p-1">
               <motion.button
                 type="button"
                 aria-label="Decrease quantity"
@@ -162,7 +193,7 @@ export default function ProductDetail({ product }) {
             </div>
           </motion.div>
 
-          {/* Animated Add to Cart Button */}
+          {/* Add to Cart Button */}
           <motion.div variants={itemVariants}>
             <motion.button
               type="button"
@@ -183,7 +214,11 @@ export default function ProductDetail({ product }) {
                     initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
                     animate={{ opacity: 1, scale: 1, rotate: 0 }}
                     exit={{ opacity: 0, scale: 0.5 }}
-                    transition={{ type: "spring", stiffness: 500, damping: 20 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 20,
+                    }}
                     className="flex items-center gap-2"
                   >
                     <Check size={18} aria-hidden="true" />

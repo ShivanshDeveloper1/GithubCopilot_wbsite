@@ -9,9 +9,23 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Define the shape of params for Next.js App Router
 type Context = {
   params: Promise<{ id: string }>;
+};
+
+// Helper function for uploading a single File to Cloudinary
+const uploadToCloudinary = async (file: File): Promise<string> => {
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+
+  return new Promise<string>((resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream({ folder: "products" }, (error, result) => {
+        if (error || !result) reject(error);
+        else resolve((result as UploadApiResponse).secure_url);
+      })
+      .end(buffer);
+  });
 };
 
 export async function DELETE(req: NextRequest, { params }: Context) {
@@ -35,27 +49,30 @@ export async function PUT(req: NextRequest, { params }: Context) {
     const category = formData.get("category") as string;
     const price = parseFloat(formData.get("price") as string);
     const description = formData.get("description") as string;
-    const file = formData.get("image");
 
-    // Tell TypeScript this object can hold any string keys (so we can append .image later)
     const updateData: Record<string, any> = { name, category, price, description };
 
-    // If a new image file is uploaded, upload it to Cloudinary
-    if (file && typeof file !== "string" && file.size > 0) {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
+    // Check for uploaded images
+    const rawFiles = formData.getAll("images");
+    const singleFile = formData.get("image");
 
-      // Type the Promise as UploadApiResponse so TS knows secure_url exists
-      const uploadResponse = await new Promise<UploadApiResponse>((resolve, reject) => {
-        cloudinary.uploader
-          .upload_stream({ folder: "products" }, (error, result) => {
-            if (error) reject(error);
-            else resolve(result as UploadApiResponse);
-          })
-          .end(buffer);
+    const filesToUpload: File[] = [];
+
+    if (rawFiles.length > 0) {
+      rawFiles.forEach((f) => {
+        if (typeof f !== "string" && f.size > 0) filesToUpload.push(f as File);
       });
+    } else if (singleFile && typeof singleFile !== "string" && singleFile.size > 0) {
+      filesToUpload.push(singleFile as File);
+    }
 
-      updateData.image = uploadResponse.secure_url;
+    // Only update images if new files were provided
+    if (filesToUpload.length > 0) {
+      const imageUrls = await Promise.all(
+        filesToUpload.map((file) => uploadToCloudinary(file))
+      );
+      updateData.images = imageUrls;
+      updateData.image = imageUrls[0];
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {

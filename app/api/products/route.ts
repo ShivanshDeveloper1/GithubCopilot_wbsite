@@ -3,7 +3,7 @@ import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import { dbConnect } from "@/lib/db";
 import Product from "@/models/pamper";
 
-export const maxDuration = 60; // optional timeout config
+export const maxDuration = 60;
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -11,11 +11,25 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// Helper function to upload a single File buffer to Cloudinary
+const uploadToCloudinary = async (file: File): Promise<string> => {
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+
+  return new Promise<string>((resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream({ folder: "products" }, (error, result) => {
+        if (error || !result) reject(error);
+        else resolve((result as UploadApiResponse).secure_url);
+      })
+      .end(buffer);
+  });
+};
+
 // GET all products
 export async function GET() {
   try {
     await dbConnect();
-    // Removed the empty {} from find() to fix the TypeScript error
     const products = await Product.find().sort({ createdAt: -1 });
     return NextResponse.json({ success: true, data: products });
   } catch (error: any) {
@@ -23,7 +37,7 @@ export async function GET() {
   }
 }
 
-// POST new product (Handles File Upload + Database Saving)
+// POST new product (Handles Multi-Image Upload)
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
@@ -33,30 +47,40 @@ export async function POST(req: NextRequest) {
     const category = formData.get("category") as string;
     const price = parseFloat(formData.get("price") as string);
     const description = formData.get("description") as string;
-    const file = formData.get("image");
 
-    if (!file || typeof file === "string") {
-      return NextResponse.json({ success: false, message: "Image is required" }, { status: 400 });
+    // Collect all files from "images" or single fallback "image"
+    const rawFiles = formData.getAll("images");
+    const singleFile = formData.get("image");
+
+    const filesToUpload: File[] = [];
+
+    if (rawFiles.length > 0) {
+      rawFiles.forEach((f) => {
+        if (typeof f !== "string" && f.size > 0) filesToUpload.push(f as File);
+      });
+    } else if (singleFile && typeof singleFile !== "string" && singleFile.size > 0) {
+      filesToUpload.push(singleFile as File);
     }
 
-    // Convert File object to Buffer for Cloudinary upload stream
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    if (filesToUpload.length === 0) {
+      return NextResponse.json(
+        { success: false, message: "At least one image is required" },
+        { status: 400 }
+      );
+    }
 
-    // Type the Promise to expect Cloudinary's UploadApiResponse
-    const uploadResponse = await new Promise<UploadApiResponse>((resolve, reject) => {
-      cloudinary.uploader.upload_stream({ folder: "products" }, (error, result) => {
-        if (error) reject(error);
-        else resolve(result as UploadApiResponse);
-      }).end(buffer);
-    });
+    // Upload all files concurrently
+    const imageUrls = await Promise.all(
+      filesToUpload.map((file) => uploadToCloudinary(file))
+    );
 
     const newProduct = await Product.create({
       name,
       category,
       price,
       description,
-      image: uploadResponse.secure_url,
+      image: imageUrls[0], // Main thumbnail image
+      images: imageUrls,   // Array of all uploaded image URLs
     });
 
     return NextResponse.json({ success: true, data: newProduct }, { status: 201 });

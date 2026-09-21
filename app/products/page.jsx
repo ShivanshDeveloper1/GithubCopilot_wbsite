@@ -9,13 +9,13 @@ export default async function ProductsPage() {
   await dbConnect();
 
   const rawProducts = await Product.find({}).sort({ createdAt: -1 });
-  const products = rawProducts.map((doc) => {
-    const obj = doc.toObject();
-    obj.id = obj._id.toString();
-    delete obj._id;
-    delete obj.__v;
-    return obj;x
-  });
+const products = rawProducts.map((doc) => {
+  const obj = doc.toObject();
+  obj.id = obj._id.toString();
+  delete obj._id;
+  delete obj.__v;
+  return obj;
+});
 
   return (
     <PageReveal className="mx-auto max-w-7xl px-[var(--space-page)] py-16 sm:py-24">
